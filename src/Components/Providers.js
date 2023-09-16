@@ -48,7 +48,11 @@ const Providers = () => {
             <p className="provider-description">{provider.description}</p>
             <div className="provider-cost-and-book">
               <p className="provider-cost">{provider.cost[selectedTime]}</p>
-              <button className="provider-book-button">Book Travel</button>
+              <Link
+                to={`/payments?d=${destination}&p=${index}&t=${selectedTime}`}
+              >
+                <button className="provider-book-button">Book Travel</button>
+              </Link>
             </div>
           </div>
         ))}
