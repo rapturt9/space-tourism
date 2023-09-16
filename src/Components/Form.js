@@ -36,39 +36,6 @@ const Form = () => {
   return (
     <div style={style}>
       <form>
-        <div className="row">
-          <FileSelector pet={pet} setPet={setPet} onSubmit={handleSubmit} />
-          <div>
-            <label for="nameInput">Pet's name</label>
-            <input
-              className="u-full-width"
-              type="text"
-              placeholder="Max"
-              id="nameInput"
-              onChange={setName}
-            />
-          </div>
-          <div>
-            <label for="breedInput">Breed</label>
-            <select
-              className="u-full-width"
-              id="breedInput"
-              onChange={setBreed}
-            >
-              <option value="Labrador">Labrador</option>
-              <option value="Bulldog">Bulldog</option>
-              <option value="Poodle">Poodle</option>
-            </select>
-          </div>
-          <div>
-            <label for="ageInput">Age</label>
-            <select className="u-full-width" id="ageInput" onChange={setAge}>
-              {[...Array(10).keys()].map((i) => (
-                <option value={i}>{i}</option>
-              ))}
-            </select>
-          </div>
-        </div>
         <input className="button-primary" type="submit" value="Mint" />
       </form>
     </div>
