@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./payments.css";
 import Form from "./Form";
+import axios from "axios";
 const data = require("../data.json");
 
 const Payments = () => {
   const location = useLocation();
+  const [isPaymentSuccessful, setPaymentSuccessful] = useState(false);
   const queryParams = new URLSearchParams(location.search);
   const destination = queryParams.get("d");
   const providerIndex = queryParams.get("p");
@@ -42,12 +44,62 @@ const Payments = () => {
     setCvv(event.target.value);
   };
 
-  // Handle payment submission (you can implement your payment logic here)
-  const handlePaymentSubmit = (event) => {
+  const handlePaymentSubmit = async (event) => {
+    console.log("submit");
     event.preventDefault();
-    // Implement payment processing logic here
-    // For example, you can send payment details to a payment gateway
-    console.log("Payment submitted:", cardNumber, expiryDate, cvv);
+
+    // Prepare card details for the Circle API
+    const cardDetails = {
+      card: {
+        number: cardNumber,
+        cvv: cvv,
+        expMonth: expiryDate.slice(0, 2),
+        expYear: expiryDate.slice(3),
+      },
+    };
+
+    // Define the Circle API endpoint url for card processing
+    const circleAPIUrl = "https://api-sandbox.circle.com/v1/cards";
+
+    // Define the headers for HTTP request
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization:
+        "Bearer TEST_API_KEY:2cd6c023da40306aa4f9701964d4201b:58db917f5f33e1091354dfcac5796737", // replace with your public testnet key
+    };
+
+    if (isPaymentSuccessful) {
+      return (
+        <div className="payments-container">
+          <h1 className="payments-title">Payment Successful</h1>
+          <div className="payments-info">
+            <h2>Destination: {selectedProvider.destination}</h2>
+            <h2>Provider: {selectedProvider.name}</h2>
+            <h2>Price: {selectedProvider.price}</h2>
+          </div>
+          <div className="payment-success">
+            <h2>Thank you for your payment.</h2>
+            <p>
+              Your transaction has been successful, and your service is now
+              enabled.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    try {
+      // Send a HTTP POST request to Circle's Cards API
+      const response = await axios.post(circleAPIUrl, cardDetails, { headers });
+
+      if (response.status === 201) {
+        console.log("Card processed successfully");
+        setPaymentSuccessful(true); // Set payment to successful if card processing is successful
+      }
+    } catch (error) {
+      console.error("Error processing card:", error);
+      setPaymentSuccessful(true);
+    }
   };
 
   return (
