@@ -68,26 +68,6 @@ const Payments = () => {
         "Bearer TEST_API_KEY:2cd6c023da40306aa4f9701964d4201b:58db917f5f33e1091354dfcac5796737", // replace with your public testnet key
     };
 
-    if (isPaymentSuccessful) {
-      return (
-        <div className="payments-container">
-          <h1 className="payments-title">Payment Successful</h1>
-          <div className="payments-info">
-            <h2>Destination: {selectedProvider.destination}</h2>
-            <h2>Provider: {selectedProvider.name}</h2>
-            <h2>Price: {selectedProvider.price}</h2>
-          </div>
-          <div className="payment-success">
-            <h2>Thank you for your payment.</h2>
-            <p>
-              Your transaction has been successful, and your service is now
-              enabled.
-            </p>
-          </div>
-        </div>
-      );
-    }
-
     try {
       // Send a HTTP POST request to Circle's Cards API
       const response = await axios.post(circleAPIUrl, cardDetails, { headers });
@@ -101,6 +81,25 @@ const Payments = () => {
       setPaymentSuccessful(true);
     }
   };
+
+  if (isPaymentSuccessful) {
+    return (
+      <div className="payments-container">
+        <h1 className="payments-title">Payment Successful</h1>
+        <div className="payments-info">
+          <h2>Destination: {selectedProvider.destination}</h2>
+          <h2>Provider: {selectedProvider.name}</h2>
+          <h2>Price: {selectedProvider.price}</h2>
+        </div>
+        <div className="payment-success">
+          <h2>Thank you for your payment.</h2>
+          <p>
+            Your transaction has been successful, and you now can tour space.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="payments-container">
